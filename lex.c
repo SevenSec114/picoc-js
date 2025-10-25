@@ -8,8 +8,21 @@
 #define isalnum(c) (isalpha(c) || isdigit(c))
 #define isspace(c) ((c) == ' ' || (c) == '\t' || (c) == '\r' || (c) == '\n')
 #endif
-#define isCidstart(c) (isalpha(c) || (c)=='_' || (c)=='#')
-#define isCident(c) (isalnum(c) || (c)=='_')
+
+/* UTF-8 leading byte indicators:
+ * 0xxxxxxx = 1 byte character (ASCII)
+ * 110xxxxx = 2 byte character
+ * 1110xxxx = 3 byte character
+ * 11110xxx = 4 byte character
+ */
+#define isutf8start(c) (((c) & 0x80) != 0 && ((c) & 0x40) != 0) /* Check if this is a UTF-8 start byte */
+#define isutf8cont(c) (((c) & 0xC0) == 0x80) /* Check if this is a UTF-8 continuation byte */
+
+/* Check if a character can start an identifier - ASCII letters, underscore, hash, and UTF-8 start bytes */
+#define isCidstart(c) (isalpha(c) || (c)=='_' || (c)=='#' || isutf8start(c))
+
+/* Check if a character can be part of an identifier - ASCII letters/digits, underscore, and UTF-8 bytes */
+#define isCident(c) (isalnum(c) || (c)=='_' || isutf8start(c) || isutf8cont(c))
 
 #define IS_HEX_ALPHA_DIGIT(c) (((c) >= 'a' && (c) <= 'f') || ((c) >= 'A' && (c) <= 'F'))
 #define IS_BASE_DIGIT(c,b) (((c) >= '0' && (c) < '0' + (((b)<10)?(b):10)) || (((b) > 10) ? IS_HEX_ALPHA_DIGIT(c) : FALSE))
