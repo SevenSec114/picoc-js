@@ -1,5 +1,5 @@
 #CC=gcc
-CFLAGS=-pedantic -g -DUNIX_HOST -DVER=\"2.1\" -s MODULARIZE=1 -s 'EXPORT_NAME="PicocModule"' -s 'EXTRA_EXPORTED_RUNTIME_METHODS=["runc"]' --pre-js "pre-module.js" --post-js "post-module.js" -s SINGLE_FILE=1 -Os
+CFLAGS=-pedantic -g -DUNIX_HOST -DVER=\"2.1\" -s MODULARIZE=1 -s 'EXPORT_NAME="PicocModule"' --pre-js "pre-module.js" --post-js "post-module.js" -s SINGLE_FILE=1 -Os
 LIBS=-lm 
 
 TARGET	= picoc.js
@@ -43,7 +43,7 @@ clibrary.o: clibrary.c picoc.h interpreter.h platform.h
 platform.o: platform.c picoc.h interpreter.h platform.h
 include.o: include.c picoc.h interpreter.h platform.h
 debug.o: debug.c interpreter.h platform.h
-platform/platform_unix.o: platform/platform_unix.c picoc.h interpreter.h platform.h
+# platform/platform_unix.o: platform/platform_unix.c picoc.h interpreter.h platform.h
 platform/library_unix.o: platform/library_unix.c interpreter.h platform.h
 cstdlib/stdio.o: cstdlib/stdio.c interpreter.h platform.h
 cstdlib/math.o: cstdlib/math.c interpreter.h platform.h
